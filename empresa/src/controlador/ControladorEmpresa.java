@@ -27,6 +27,10 @@ public static void inserir(ManutencaoEmpresa man){
         boolean resultado = DaoEmpresa.inserir(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Inserido com sucesso!");
+             if (man.listagem != null) {
+     atualizarTabela(man.listagem.tabela); //atualizar a tabela da listagem
+}
+man.dispose();//fechar a tela da manutenção
         } else {
             JOptionPane.showMessageDialog(null, "Erro!");
         }
@@ -42,6 +46,10 @@ public static void inserir(ManutencaoEmpresa man){
         boolean resultado = DaoEmpresa.alterar(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+             if (man.listagem != null) {
+     atualizarTabela(man.listagem.tabela); //atualizar a tabela da listagem
+}
+man.dispose();//fechar a tela da manutenção
         } else {
             JOptionPane.showMessageDialog(null, "Erro!");
         }
@@ -54,13 +62,14 @@ public static void inserir(ManutencaoEmpresa man){
         boolean resultado = DaoEmpresa.excluir(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Erro!");
-        }
-        if (man.istagem != null) {
+             if (man.listagem != null) {
      atualizarTabela(man.listagem.tabela); //atualizar a tabela da listagem
 }
 man.dispose();//fechar a tela da manutenção
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro!");
+        }
+      
     }
    public static void atualizarTabela(JTable tabela) {
         DefaultTableModel modelo = new DefaultTableModel();
