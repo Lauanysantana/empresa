@@ -23,7 +23,6 @@ public static void inserir(ManutencaoEmpresa man){
         Empresa objeto = new Empresa();
         objeto.setRazao_social(man.jtfrazaosocial.getText());
         objeto.setNome_fantasia(man.jtfnomefantasia.getText());
-        objeto.setCodigo(Integer.parseInt(man.jtfcodigo.getText()));
         boolean resultado = DaoEmpresa.inserir(objeto);
         if (resultado) {
             JOptionPane.showMessageDialog(null, "Inserido com sucesso!");

@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package dao;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -11,13 +12,43 @@ import modelo.Empresa;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author Administrador
  */
 public class DaoEmpresa {
-     public static boolean inserir(Empresa objeto) {
-        String sql = "INSERT INTO empresa (razao_social, nome_fantasia, codigo) VALUES (?, ?, ?)";
+
+    public static boolean inserir(Empresa objeto) {
+        String sql = "INSERT INTO empresa (razao_social, nome_fantasia) VALUES (?, ?)";
+        try {
+            PreparedStatement ps = conexao.Conexao.getConexao().prepareStatement(sql);
+            ps.setString(1, objeto.getRazao_social());
+            ps.setString(2, objeto.getNome_fantasia());
+
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        Empresa objeto = new Empresa();
+        objeto.setRazao_social("Lojas Lauany");
+        objeto.setNome_fantasia("Miss teen");
+
+        boolean resultado = inserir(objeto);
+        if (resultado) {
+            JOptionPane.showMessageDialog(null, "Inserido com sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro!");
+        }
+    }
+
+    public static boolean alterar(Empresa objeto) {
+        String sql = "UPDATE empresa SET razao_social = ?, nome_fantasia = ? WHERE codigo=?";
         try {
             PreparedStatement ps = conexao.Conexao.getConexao().prepareStatement(sql);
             ps.setString(1, objeto.getRazao_social());
@@ -30,34 +61,8 @@ public class DaoEmpresa {
             return false;
         }
     }
-      public static void main(String[] args) {
-        Empresa objeto = new Empresa();
-        objeto.setRazao_social("Lojas Lauany");
-        objeto.setNome_fantasia("Miss teen");
-        objeto.setCodigo(64547);
-        
-        boolean resultado = inserir(objeto);
-        if (resultado) {
-            JOptionPane.showMessageDialog(null, "Inserido com sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Erro!");
-        }
-    }
-       public static boolean alterar(Empresa objeto) {
-        String sql = "UPDATE empresa SET razao_social = ?, nome_fantasia = ? WHERE codigo=?";
-        try {
-            PreparedStatement ps = conexao.Conexao.getConexao().prepareStatement(sql);
-            ps.setString(1, objeto.getRazao_social()); 
-            ps.setString(2, objeto.getNome_fantasia());
-            ps.setInt(3, objeto.getCodigo());
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException | ClassNotFoundException ex) {
-            System.out.println(ex.getMessage());
-            return false;
-        }
-    }
-        public static boolean excluir(Empresa objeto) {
+
+    public static boolean excluir(Empresa objeto) {
         String sql = "DELETE FROM empresa WHERE codigo=?";
         try {
             PreparedStatement ps = conexao.Conexao.getConexao().prepareStatement(sql);
@@ -69,7 +74,8 @@ public class DaoEmpresa {
             return false;
         }
     }
-        public static List<Empresa> consultar() {
+
+    public static List<Empresa> consultar() {
         List<Empresa> resultados = new ArrayList<>();
         //editar o SQL conforme a entidade
         String sql = "SELECT razao_social, nome_fantasia, codigo FROM empresa";
@@ -83,7 +89,7 @@ public class DaoEmpresa {
                 objeto.setCodigo(rs.getInt("codigo"));
                 objeto.setRazao_social(rs.getString("razao_social"));
                 objeto.setNome_fantasia(rs.getString("nome_fantasia"));
-                
+
                 resultados.add(objeto);//não mexa nesse, ele adiciona o objeto na lista
             }
             return resultados;
@@ -91,8 +97,9 @@ public class DaoEmpresa {
             System.out.println(ex.getMessage());
             return null;
         }
-}
-        public static Empresa consultar(int primaryKey) {
+    }
+
+    public static Empresa consultar(int primaryKey) {
         //editar o SQL conforme a entidade
         String sql = "SELECT razao_social, nome_fantasia, codigo FROM empresa WHERE codigo=?";
         PreparedStatement ps;
